@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Breathe Animation Circle</title>
+  <style>
+    input#toggle {
+      display: none;
+    }
+    .circle {
+      width: 150px;
+      height: 150px;
+      background-color: yellow;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      user-select: none;
+      margin: 100px auto;
+    }
+    .circle .text {
+      font-size: 1.2rem;
+      transition: color 0.5s ease;
+      animation: breathe In 2s ease-in-out infinite;
+    }
+    input#toggle:checked + .circle {
+      width: 250px;
+      height: 250px;
+      background-color: black;
+    }
+    input#toggle:checked + .circle .text {
+      color: white;
+      animation: breatheOut 2s ease-in-out infinite;
+    }
+    @keyframes breatheIn {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    @keyframes breatheOut {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(0.8); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <input type="checkbox" id="toggle">
+  <label for="toggle" class="circle">
+    <span class="text">Breathe</span>
+  </label>
+</body>
+</html>

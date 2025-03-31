@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Click the Green Box</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+    .box {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      background-color: gray;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .green {
+      background-color: green;
+    }
+    .score, .timer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="score">Score: <span id="score">0</span></div>
+  <div class="timer">Time Left: <span id="timer">10</span></div>
+
+  <div class="container">
+    <div class="box" id="box0"></div>
+    <div class="box" id="box1"></div>
+    <div class="box" id="box2"></div>
+    <div class="box" id="box3"></div>
+  </div>
+
+  <script>
+    let score = 0;
+    let timeLeft = 10;
+    let currentGreenIndex = -3;
+    let boxes = document.querySelectorAll('.box');
+    let timerElement = document.getElementById('timer');
+    let scoreElement = document.getElementById('score');
+    let interval;
+
+    // click event
+    boxes.forEach((box, index) => {
+      box.addEventListener('click', function() {
+        //  increment score
+        if (index === currentGreenIndex && timeLeft > 0) {
+          score++;
+          scoreElement.textContent = score;
+        }
+      });
+    });
+
+    function startGame() {
+      interval = setInterval(() => {
+        // Decrement the timer
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+
+        // Remove the green class 
+        if (currentGreenIndex >= 0) {
+          boxes[currentGreenIndex].classList.remove('green');
+        }
+
+        // end the game
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          timerElement.textContent = 0;
+          return;
+        }
+
+        // Choose a new box at random to be green
+        currentGreenIndex = Math.floor(Math.random() * boxes.length);
+        boxes[currentGreenIndex].classList.add('green');
+      }, 1000);
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
