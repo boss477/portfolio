@@ -12,6 +12,7 @@
       height: 100vh;
       margin: 0;
       background: #1a1a1a;
+      flex-direction: column;
     }
     #game-container {
       border: 2px solid #4CAF50;
@@ -21,9 +22,21 @@
     canvas {
       background: #000;
     }
+    #scoreboard {
+      color: #fff;
+      margin-bottom: 10px;
+      font-family: sans-serif;
+    }
+    #scoreboard span {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
+  <div id="scoreboard">
+    Player 1 Score: <span id="score1">0</span> | Player 2 Score: <span id="score2">0</span>
+  </div>
+
   <div id="game-container">
     <canvas id="game-canvas"></canvas>
   </div>
@@ -39,6 +52,9 @@
 
     canvas.width = GAME_WIDTH;
     canvas.height = GAME_HEIGHT;
+
+    let score1 = 0;
+    let score2 = 0;
 
     let snakes = {
       player1: {
@@ -80,6 +96,13 @@
 
       if (head.x === apple.x && head.y === apple.y) {
         apple = generateApple();
+        if (snake === snakes.player1) {
+          score1++;
+          document.getElementById('score1').innerText = score1;
+        } else {
+          score2++;
+          document.getElementById('score2').innerText = score2;
+        }
       } else {
         snake.body.pop();
       }
@@ -87,43 +110,31 @@
 
     function checkCollision(snake) {
       const head = snake.body[0];
-
-      // Wall
       if (
         head.x < 0 || head.x >= GAME_WIDTH ||
         head.y < 0 || head.y >= GAME_HEIGHT
       ) return true;
-
-      // Self
       if (
         snake.body.slice(1).some(seg => seg.x === head.x && seg.y === head.y)
       ) return true;
-
-      // Other player
       const opponent = snake === snakes.player1 ? snakes.player2 : snakes.player1;
       return opponent.body.some(seg => seg.x === head.x && seg.y === head.y);
     }
 
     function gameLoop() {
       Object.values(snakes).forEach(updateSnake);
-
       const collisions = {
         p1: checkCollision(snakes.player1),
         p2: checkCollision(snakes.player2)
       };
-
-      // Draw
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
-
       Object.values(snakes).forEach(snake => {
         snake.body.forEach(segment => {
           ctx.fillStyle = snake.color;
           ctx.fillRect(segment.x, segment.y, CELL_SIZE, CELL_SIZE);
         });
       });
-
-      // Apple
       ctx.fillStyle = '#FF5252';
       ctx.beginPath();
       ctx.arc(
@@ -134,25 +145,25 @@
         Math.PI * 2
       );
       ctx.fill();
-
-      // Game over
       if (collisions.p1 || collisions.p2) {
         let message = '';
         if (collisions.p1 && collisions.p2) message = 'Double KO!';
         else if (collisions.p1) message = 'Player 2 Wins!';
         else message = 'Player 1 Wins!';
-
         if (confirm(`${message} Play again?`)) {
           resetGame();
         } else {
           return;
         }
       }
-
       setTimeout(gameLoop, GAME_SPEED);
     }
 
     function resetGame() {
+      score1 = 0;
+      score2 = 0;
+      document.getElementById('score1').innerText = score1;
+      document.getElementById('score2').innerText = score2;
       snakes = {
         player1: {
           body: [{ x: 100, y: 100 }],
@@ -184,7 +195,6 @@
         case 'ArrowRight':
           if (player1.direction.x === 0) player1.direction = { x: CELL_SIZE, y: 0 };
           break;
-
         case 'w':
           if (player2.direction.y === 0) player2.direction = { x: 0, y: -CELL_SIZE };
           break;
