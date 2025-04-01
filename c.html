@@ -8,9 +8,10 @@
       display: none;
     }
     .circle {
+      position: relative;
       width: 150px;
       height: 150px;
-      background-color: yellow;
+      background-color: rgb(0, 0, 0);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -20,15 +21,33 @@
       user-select: none;
       margin: 100px auto;
     }
-    .circle .text {
+    /* Inner circle */
+    .inner-circle {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-color: rgb(251, 255, 0);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s ease;
+    }
+    .inner-circle .text {
       font-size: 1.2rem;
       transition: color 0.5s ease;
-      animation: breathe In 2s ease-in-out infinite;
+      animation: breatheIN 2s ease-in-out infinite;
     }
+    /* Toggle styles */
     input#toggle:checked + .circle {
       width: 250px;
       height: 250px;
-      background-color: black;
+      background-color: rgb(255, 251, 0); /* Changed to red */
+    }
+    input#toggle:checked + .circle .inner-circle {
+      width: 150px;
+      height: 150px;
+      background-color: #000000;
     }
     input#toggle:checked + .circle .text {
       color: white;
@@ -49,7 +68,10 @@
 <body>
   <input type="checkbox" id="toggle">
   <label for="toggle" class="circle">
-    <span class="text">Breathe</span>
+    <!-- Inner circle with the text inside -->
+    <div class="inner-circle">
+      <span class="text">Breathe IN</span>
+    </div>
   </label>
 </body>
 </html>
