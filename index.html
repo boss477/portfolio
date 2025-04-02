@@ -12,39 +12,38 @@
     }
 
     html {
-      scroll-behavior: smooth; 
+      scroll-behavior: smooth;
     }
 
     body {
-      background: #000;     
-      color: #FFD700;        
+      background: #000;
+      color: #FFD700;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.7; 
-      overflow-x: hidden; 
+      line-height: 1.7;
+      overflow-x: hidden;
     }
 
     header {
       background: #000;
       color: #FFD700;
-      padding: 1.5rem 0; 
+      padding: 1.5rem 0;
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 999;
-      position: relative; 
+      position: relative;
       overflow: hidden;
     }
 
-    
     header::after {
       content: '';
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 0; 
+      width: 0;
       height: 2px;
       background-color: #FFD700;
-      animation: expandWidth 1.5s ease 0.5s forwards; 
+      animation: expandWidth 1.5s ease 0.5s forwards;
     }
 
     @keyframes expandWidth {
@@ -54,10 +53,10 @@
     }
 
     header h1 {
-      margin-bottom: 0.75rem; 
-      font-size: 2.5rem; 
+      margin-bottom: 0.75rem;
+      font-size: 2.5rem;
       opacity: 0;
-      animation: fadeInDown 1s ease 0.2s forwards; 
+      animation: fadeInDown 1s ease 0.2s forwards;
     }
 
     nav ul {
@@ -66,9 +65,9 @@
 
     nav li {
       display: inline-block;
-      margin: 0 1.2rem; 
+      margin: 0 1.2rem;
       opacity: 0;
-      animation: fadeInUp 0.8s ease forwards; 
+      animation: fadeInUp 0.8s ease forwards;
     }
 
     nav li:nth-child(1) { animation-delay: 0.7s; }
@@ -80,7 +79,7 @@
       color: #FFD700;
       font-weight: bold;
       transition: color 0.3s ease;
-      position: relative; 
+      position: relative;
       padding-bottom: 5px;
       font-size: 1.1rem;
     }
@@ -90,9 +89,9 @@
       position: absolute;
       width: 0;
       height: 2px;
-      background-color: #fff; 
+      background-color: #fff;
       bottom: 0;
-      left: 50%; 
+      left: 50%;
       transform: translateX(-50%);
       transition: width 0.4s ease;
     }
@@ -102,29 +101,29 @@
     }
 
     nav a:hover::after {
-      width: 100%; 
+      width: 100%;
     }
 
     section {
       max-width: 1000px;
-      margin: 4rem auto; 
+      margin: 4rem auto;
       padding: 0 1.5rem;
-      opacity: 0; 
-      transform: translateY(40px); 
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
 
     section.is-visible {
         opacity: 1;
-        transform: translateY(0); 
+        transform: translateY(0);
     }
 
     section h2 {
-      margin-bottom: 2rem; 
-      font-size: 2.2rem; 
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
       text-align: center;
       position: relative;
-      display: inline-block; 
+      display: inline-block;
       left: 50%;
       transform: translateX(-50%);
     }
@@ -132,12 +131,12 @@
     section h2::after {
         content: '';
         position: absolute;
-        width: 0%; 
+        width: 0%;
         height: 3px;
         background-color: #FFD700;
         bottom: -10px;
-        left: 0; 
-        transition: width 0.8s ease-in-out 0.5s; 
+        left: 0;
+        transition: width 0.8s ease-in-out 0.5s;
     }
 
     section.is-visible h2::after {
@@ -146,16 +145,17 @@
 
     .profile-pic {
       display: block;
-      width: 180px; 
-      height: 180px; 
+      width: 180px;
+      height: 180px;
       object-fit: cover;
       border-radius: 50%;
       border: 3px solid #FFD700;
-      margin: 0 auto 2rem; 
+      margin: 0 auto 2rem;
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
       transform: scale(0.95);
       opacity: 0;
-      transition: opacity 0.8s ease-out 0.2s, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s, box-shadow 0.4s ease; 
+      transition: opacity 0.8s ease-out 0.2s, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s, box-shadow 0.4s ease;
+    }
 
     section.is-visible .profile-pic {
         opacity: 1;
@@ -163,50 +163,49 @@
     }
 
     .profile-pic:hover {
-        transform: scale(1.08); 
-        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); 
+        transform: scale(1.08);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
     }
 
     .projects-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-      grid-gap: 2rem; 
-      margin-top: 2.5rem; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-gap: 2rem;
+      margin-top: 2.5rem;
     }
 
     .project {
-      background: #1a1a1a; 
-      border-radius: 8px; 
-      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.15); 
+      background: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.15);
       padding: 1.5rem;
       text-align: center;
       opacity: 0;
-      transform: scale(0.95) translateY(20px); 
+      transform: scale(0.95) translateY(20px);
       transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.35s ease;
     }
 
-    
     .project.is-visible {
        opacity: 1;
-       transform: scale(1) translateY(0); 
+       transform: scale(1) translateY(0);
     }
 
     .project h3 {
       margin-bottom: 0.75rem;
-      font-size: 1.35rem; 
+      font-size: 1.35rem;
       color: #FFD700;
     }
 
     .project p {
       margin-bottom: 1.2rem;
-      color: #eee; 
+      color: #eee;
       font-size: 1rem;
     }
 
     .project a {
       display: inline-block;
-      padding: 0.6rem 1.2rem; 
-      border-radius: 5px; 
+      padding: 0.6rem 1.2rem;
+      border-radius: 5px;
       background: #FFD700;
       color: #000;
       text-decoration: none;
@@ -218,19 +217,19 @@
     .project a:hover {
       background: #fff;
       color: #000;
-      transform: scale(1.05); 
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); 
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
     }
 
     .project:hover {
       transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 10px 20px rgba(255, 215, 0, 0.35); 
+      box-shadow: 0 10px 20px rgba(255, 215, 0, 0.35);
     }
 
     #contact p {
-      margin: 0.8rem 0; 
-      font-size: 1.1rem; 
-      text-align: center; 
+      margin: 0.8rem 0;
+      font-size: 1.1rem;
+      text-align: center;
     }
 
     #contact a {
@@ -239,24 +238,24 @@
       font-weight: bold;
       transition: color 0.3s ease, letter-spacing 0.3s ease, text-decoration-color 0.3s ease;
       position: relative;
-      text-decoration: underline; 
-      text-decoration-color: transparent; 
+      text-decoration: underline;
+      text-decoration-color: transparent;
     }
 
     #contact a:hover {
-      color: #fff; 
-      text-decoration-color: #fff; 
-      letter-spacing: 0.5px; 
+      color: #fff;
+      text-decoration-color: #fff;
+      letter-spacing: 0.5px;
     }
 
     footer {
       text-align: center;
-      padding: 1.5rem; 
+      padding: 1.5rem;
       background: #000;
-      color: #aaa; 
-      margin-top: 4rem; 
-      border-top: 2px solid #333; 
-      opacity: 0; 
+      color: #aaa;
+      margin-top: 4rem;
+      border-top: 2px solid #333;
+      opacity: 0;
       animation: fadeIn 1.5s ease 1.5s forwards;
     }
 
@@ -302,11 +301,10 @@
   </header>
 
   <section id="about" class="animate-on-scroll">
-    <img src="fawaz.jpg"  class="profile-pic" />
+    <img src="fawaz.jpg" class="profile-pic" />
     <h2>About Me</h2>
     <p>
-     Fawaz is a tech enthusiast studying cyber-physical systems at VIT Chennai, deeply interested in IoT, AI, data analytics, cloud computing, UI/UX design, and prototyping. While peers discuss fashion and weekend plans, he dedicates his time to coding and learning about technology. Eager to make an impact in the tech world, Fawaz invites others to connect and explore technology together, encouraging passionate minds to keep shining.
-    </p>
+      Fawaz is a tech enthusiast studying cyber-physical systems at VIT Chennai, deeply interested in IoT, AI, data analytics, cloud computing, UI/UX design, and prototyping. While peers discuss fashion and weekend plans, he dedicates his time to coding and learning about technology. Eager to make an impact in the tech world, Fawaz invites others to connect and explore technology together, encouraging passionate minds to keep shining.
     <p>Keep shining, tech enthusiasts! The world needs more passionate minds like ours.</p>
   </section>
 
@@ -343,10 +341,9 @@
 
   <section id="contact" class="animate-on-scroll">
     <h2>Contact</h2>
-    <p><strong>Email:</strong> <a href="mailto:fawaz@gmail.com">fawaz@gmail.com</a></p>
+    <p><strong>Email:</strong> <a href="mailto:fawaz@gmail.com">fawaz0212@kbgmail.com</a></p>
     <p><strong>GitHub:</strong> <a href="https://github.com/fawaz" target="_blank">github.com/fawaz</a></p>
     <p><strong>Linkedln:</strong> <a href="https://www.linkedin.com/in/fawaz-ahamed-498239203" target="_blank">linkdln.com/fawaz</a></p>
-
   </section>
 
   <footer>
@@ -358,9 +355,9 @@
     const projectElements = document.querySelectorAll('.project.animate-on-scroll');
 
     const observerOptions = {
-      root: null, 
+      root: null,
       rootMargin: '0px',
-      threshold: 0.15 
+      threshold: 0.15
     };
 
     const observerCallback = (entries, observer) => {
@@ -371,7 +368,7 @@
           if (entry.target.classList.contains('project')) {
             if (!entry.target.style.transitionDelay) {
               const projectIndex = Array.from(projectElements).indexOf(entry.target);
-              if (projectIndex !== -1) { 
+              if (projectIndex !== -1) {
                  const delay = projectIndex * 100;
                  entry.target.style.transitionDelay = `${delay}ms`;
               }
@@ -380,7 +377,7 @@
           observer.unobserve(entry.target);
 
         } else {
-          
+
         }
       });
     };
