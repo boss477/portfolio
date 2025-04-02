@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ball Maze Game – Rigid Moving Walls (Black & Red, Circle Goal)</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    #gameCanvas {
+      background: #000;
+      border: 2px solid red;
+      display: block;
+      margin: 50px auto 10px auto;
+    }
+    #status {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="color: #fff;">Maze Game Where Walls Move</h1>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
+  <div id="status"></div>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let walls = [
+      { x: 50,  y: 50,  width: 300, height: 10 },
+      { x: 50,  y: 50,  width: 10,  height: 200 },
+      { x: 340, y: 50,  width: 10,  height: 270 },
+      { x: 60,  y: 240, width: 100, height: 10 },
+      { x: 200, y: 120, width: 10,  height: 130 },
+      { x: 120, y: 350, width: 250, height: 10 },
+      { x: 270, y: 160, width: 80,  height: 10 }
+    ];
+    const wallVelocities = walls.map(() => ({ dx: (Math.random() * 2 - 1) * 0.5, dy: (Math.random() * 2 - 1) * 0.5 }));
+    let oldWalls = walls.map(w => ({ x: w.x, y: w.y }));
+    const finish = { x: 350, y: 350, radius: 25 };
+    let ball = { x: 70, y: 70, radius: 8, speed: 2 };
+    let moveUp = false;
+    let moveDown = false;
+    let moveLeft = false;
+    let moveRight = false;
+    document.addEventListener('keydown', e => {
+      switch(e.key) {
+        case 'ArrowUp': moveUp = true; break;
+        case 'ArrowDown': moveDown = true; break;
+        case 'ArrowLeft': moveLeft = true; break;
+        case 'ArrowRight': moveRight = true; break;
+      }
+    });
+    document.addEventListener('keyup', e => {
+      switch(e.key) {
+        case 'ArrowUp': moveUp = false; break;
+        case 'ArrowDown': moveDown = false; break;
+        case 'ArrowLeft': moveLeft = false; break;
+        case 'ArrowRight': moveRight = false; break;
+      }
+    });
+    function isColliding(ballX, ballY, w) {
+      const ballLeft = ballX - ball.radius;
+      const ballRight = ballX + ball.radius;
+      const ballTop = ballY - ball.radius;
+      const ballBottom = ballY + ball.radius;
+      const wallLeft = w.x;
+      const wallRight = w.x + w.width;
+      const wallTop = w.y;
+      const wallBottom = w.y + w.height;
+      return (
+        ballRight > wallLeft &&
+        ballLeft < wallRight &&
+        ballBottom > wallTop &&
+        ballTop < wallBottom
+      );
+    }
+    function isCollidingWithWalls(newX, newY) {
+      for (let w of walls) {
+        if (isColliding(newX, newY, w)) return true;
+      }
+      return false;
+    }
+    function reachedFinish() {
+      const dx = ball.x - finish.x;
+      const dy = ball.y - finish.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      return dist < (ball.radius + finish.radius);
+    }
+    function updateBallPosition() {
+      let newX = ball.x;
+      let newY = ball.y;
+      if (moveUp) newY -= ball.speed;
+      if (moveDown) newY += ball.speed;
+      if (moveLeft) newX -= ball.speed;
+      if (moveRight) newX += ball.speed;
+      if (newX - ball.radius < 0) newX = ball.radius;
+      if (newX + ball.radius > canvas.width) newX = canvas.width - ball.radius;
+      if (newY - ball.radius < 0) newY = ball.radius;
+      if (newY + ball.radius > canvas.height) newY = canvas.height - ball.radius;
+      if (!isCollidingWithWalls(newX, newY)) {
+        ball.x = newX;
+        ball.y = newY;
+      }
+    }
+    function updateWalls() {
+      for (let i = 0; i < walls.length; i++) {
+        oldWalls[i].x = walls[i].x;
+        oldWalls[i].y = walls[i].y;
+        walls[i].x += wallVelocities[i].dx;
+        walls[i].y += wallVelocities[i].dy;
+        if (walls[i].x < -walls[i].width) {
+          walls[i].x = -walls[i].width;
+          wallVelocities[i].dx *= -1;
+        }
+        if (walls[i].x + walls[i].width > canvas.width + walls[i].width) {
+          walls[i].x = canvas.width;
+          wallVelocities[i].dx *= -1;
+        }
+        if (walls[i].y < -walls[i].height) {
+          walls[i].y = -walls[i].height;
+          wallVelocities[i].dy *= -1;
+        }
+        if (walls[i].y + walls[i].height > canvas.height + walls[i].height) {
+          walls[i].y = canvas.height;
+          wallVelocities[i].dy *= -1;
+        }
+      }
+    }
+    function pushBallByWalls() {
+      for (let i = 0; i < walls.length; i++) {
+        const w = walls[i];
+        const dxWall = w.x - oldWalls[i].x;
+        const dyWall = w.y - oldWalls[i].y;
+        if (isColliding(ball.x, ball.y, w)) {
+          const newBallX = ball.x + dxWall;
+          const newBallY = ball.y + dyWall;
+          if (!isCollidingWithWalls(newBallX, newBallY)) {
+            ball.x = newBallX;
+            ball.y = newBallY;
+          }
+        }
+      }
+    }
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'red';
+      ctx.beginPath();
+      ctx.arc(finish.x, finish.y, finish.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'red';
+      for (const w of walls) {
+        ctx.fillRect(w.x, w.y, w.width, w.height);
+      }
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    function gameLoop() {
+      updateWalls();
+      updateBallPosition();
+      pushBallByWalls();
+      draw();
+      if (reachedFinish()) {
+        document.getElementById('status').textContent = 'You Win!';
+        return;
+      }
+      requestAnimationFrame(gameLoop);
+    }
+    draw();
+    requestAnimationFrame(gameLoop);
+  </script>
+</body>
+</html>
