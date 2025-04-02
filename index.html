@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Portfolio - Junior Web Developer</title>
   <style>
-    /* Resets and general styles */
     * {
       margin: 0;
       padding: 0;
@@ -13,40 +12,39 @@
     }
 
     html {
-      scroll-behavior: smooth; /* Smooth scrolling for nav links */
+      scroll-behavior: smooth; 
     }
 
     body {
-      background: #000;      /* Black background */
-      color: #FFD700;        /* Yellow text */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
-      line-height: 1.7; /* Increased for readability */
-      overflow-x: hidden; /* Prevent horizontal scrollbars caused by animations */
+      background: #000;     
+      color: #FFD700;        
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.7; 
+      overflow-x: hidden; 
     }
 
-    /* Header and Navigation */
     header {
       background: #000;
       color: #FFD700;
-      padding: 1.5rem 0; /* Slightly more padding */
+      padding: 1.5rem 0; 
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 999;
-      position: relative; /* For animated border */
-      overflow: hidden; /* Contain the animated border */
+      position: relative; 
+      overflow: hidden;
     }
 
-    /* Animated Header Border */
+    
     header::after {
       content: '';
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 0; /* Start with no width */
+      width: 0; 
       height: 2px;
       background-color: #FFD700;
-      animation: expandWidth 1.5s ease 0.5s forwards; /* Animation runs once on load */
+      animation: expandWidth 1.5s ease 0.5s forwards; 
     }
 
     @keyframes expandWidth {
@@ -56,10 +54,10 @@
     }
 
     header h1 {
-      margin-bottom: 0.75rem; /* More spacing */
-      font-size: 2.5rem; /* Larger */
+      margin-bottom: 0.75rem; 
+      font-size: 2.5rem; 
       opacity: 0;
-      animation: fadeInDown 1s ease 0.2s forwards; /* Heading animation on load */
+      animation: fadeInDown 1s ease 0.2s forwards; 
     }
 
     nav ul {
@@ -68,12 +66,11 @@
 
     nav li {
       display: inline-block;
-      margin: 0 1.2rem; /* More spacing */
-      opacity: 0; /* Start hidden for stagger animation */
-      animation: fadeInUp 0.8s ease forwards; /* Nav item animation on load */
+      margin: 0 1.2rem; 
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards; 
     }
 
-    /* Staggered Nav Link Animation */
     nav li:nth-child(1) { animation-delay: 0.7s; }
     nav li:nth-child(2) { animation-delay: 0.9s; }
     nav li:nth-child(3) { animation-delay: 1.1s; }
@@ -83,20 +80,19 @@
       color: #FFD700;
       font-weight: bold;
       transition: color 0.3s ease;
-      position: relative; /* For underline effect */
-      padding-bottom: 5px; /* Space for underline */
+      position: relative; 
+      padding-bottom: 5px;
       font-size: 1.1rem;
     }
 
-    /* Underline Hover Effect */
     nav a::after {
       content: '';
       position: absolute;
       width: 0;
       height: 2px;
-      background-color: #fff; /* White underline on hover */
+      background-color: #fff; 
       bottom: 0;
-      left: 50%; /* Start from center */
+      left: 50%; 
       transform: translateX(-50%);
       transition: width 0.4s ease;
     }
@@ -106,184 +102,164 @@
     }
 
     nav a:hover::after {
-      width: 100%; /* Expand underline */
+      width: 100%; 
     }
 
-    /* Sections - Scroll Animation Setup */
     section {
       max-width: 1000px;
-      margin: 4rem auto; /* More vertical spacing */
-      padding: 0 1.5rem; /* More horizontal padding */
-      opacity: 0; /* Start hidden */
-      transform: translateY(40px); /* Start slightly lower */
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Animation transition */
+      margin: 4rem auto; 
+      padding: 0 1.5rem;
+      opacity: 0; 
+      transform: translateY(40px); 
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
     }
 
-    /* Class added by JS when section is in view */
     section.is-visible {
         opacity: 1;
-        transform: translateY(0); /* Animate to original position */
+        transform: translateY(0); 
     }
 
     section h2 {
-      margin-bottom: 2rem; /* More spacing */
-      font-size: 2.2rem; /* Larger */
+      margin-bottom: 2rem; 
+      font-size: 2.2rem; 
       text-align: center;
       position: relative;
-      display: inline-block; /* To contain the underline */
+      display: inline-block; 
       left: 50%;
       transform: translateX(-50%);
     }
 
-     /* Underline effect for Section Titles - Animates when section is visible */
     section h2::after {
         content: '';
         position: absolute;
-        width: 0%; /* Start hidden */
+        width: 0%; 
         height: 3px;
         background-color: #FFD700;
         bottom: -10px;
-        left: 0; /* Animate from left */
-        /* Transition applied when .is-visible is added */
-        transition: width 0.8s ease-in-out 0.5s; /* Delay the underline animation */
+        left: 0; 
+        transition: width 0.8s ease-in-out 0.5s; 
     }
 
     section.is-visible h2::after {
-        width: 100%; /* Animate width */
+        width: 100%;
     }
 
-    /* Profile Image */
     .profile-pic {
       display: block;
-      width: 180px; /* Larger */
-      height: 180px; /* Larger */
+      width: 180px; 
+      height: 180px; 
       object-fit: cover;
       border-radius: 50%;
       border: 3px solid #FFD700;
-      margin: 0 auto 2rem; /* centers image, more spacing */
-      /* Bounce effect on transform, smooth shadow */
+      margin: 0 auto 2rem; 
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-      /* Start slightly smaller for subtle pop-in with section */
       transform: scale(0.95);
-      opacity: 0; /* Start hidden */
-      transition: opacity 0.8s ease-out 0.2s, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s, box-shadow 0.4s ease; /* Added opacity/transform transition */
-    }
+      opacity: 0;
+      transition: opacity 0.8s ease-out 0.2s, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s, box-shadow 0.4s ease; 
 
-    /* Animate profile pic when section is visible */
     section.is-visible .profile-pic {
         opacity: 1;
         transform: scale(1);
     }
 
     .profile-pic:hover {
-        transform: scale(1.08); /* Slightly larger scale on hover */
-        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); /* More prominent glow on hover */
+        transform: scale(1.08); 
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); 
     }
 
-    /* Projects */
     .projects-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsive grid */
-      grid-gap: 2rem; /* Increased gap */
-      margin-top: 2.5rem; /* More spacing */
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      grid-gap: 2rem; 
+      margin-top: 2.5rem; 
     }
 
     .project {
-      background: #1a1a1a; /* Slightly lighter for depth */
-      border-radius: 8px; /* More rounded */
-      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.15); /* Softer initial shadow */
+      background: #1a1a1a; 
+      border-radius: 8px; 
+      box-shadow: 0 4px 10px rgba(255, 215, 0, 0.15); 
       padding: 1.5rem;
       text-align: center;
-      /* Scroll Animation Setup */
       opacity: 0;
-      transform: scale(0.95) translateY(20px); /* Start smaller and lower */
-      /* Define transition for when .is-visible is added */
+      transform: scale(0.95) translateY(20px); 
       transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.35s ease;
-      /* transition-delay will be added by JS for staggering */
     }
 
-     /* Class added by JS when project card is in view */
+    
     .project.is-visible {
        opacity: 1;
-       transform: scale(1) translateY(0); /* Animate into view */
+       transform: scale(1) translateY(0); 
     }
 
     .project h3 {
       margin-bottom: 0.75rem;
-      font-size: 1.35rem; /* Slightly larger */
+      font-size: 1.35rem; 
       color: #FFD700;
     }
 
     .project p {
       margin-bottom: 1.2rem;
-      color: #eee; /* Lighter grey for paragraph text */
+      color: #eee; 
       font-size: 1rem;
     }
 
     .project a {
       display: inline-block;
-      padding: 0.6rem 1.2rem; /* Slightly larger padding */
-      border-radius: 5px; /* Slightly more rounded */
+      padding: 0.6rem 1.2rem; 
+      border-radius: 5px; 
       background: #FFD700;
       color: #000;
       text-decoration: none;
       font-size: 0.95rem;
       font-weight: bold;
-      /* Added transform transition for hover effect */
       transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .project a:hover {
       background: #fff;
       color: #000;
-      transform: scale(1.05); /* Pop effect on hover */
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); /* White glow on link hover */
+      transform: scale(1.05); 
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); 
     }
 
-    /* Project card hover - More lift and slight scale */
     .project:hover {
       transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 10px 20px rgba(255, 215, 0, 0.35); /* Stronger hover shadow */
+      box-shadow: 0 10px 20px rgba(255, 215, 0, 0.35); 
     }
 
-    /* Contact Section */
     #contact p {
-      margin: 0.8rem 0; /* More spacing */
-      font-size: 1.1rem; /* Slightly larger */
-      text-align: center; /* Center contact info */
+      margin: 0.8rem 0; 
+      font-size: 1.1rem; 
+      text-align: center; 
     }
 
     #contact a {
       color: #FFD700;
       text-decoration: none;
       font-weight: bold;
-      /* Added letter-spacing transition for hover */
       transition: color 0.3s ease, letter-spacing 0.3s ease, text-decoration-color 0.3s ease;
       position: relative;
-      text-decoration: underline; /* Start with underline */
-      text-decoration-color: transparent; /* Hide initial underline */
+      text-decoration: underline; 
+      text-decoration-color: transparent; 
     }
 
     #contact a:hover {
-      color: #fff; /* Brighter hover */
-      text-decoration-color: #fff; /* Show underline on hover */
-      letter-spacing: 0.5px; /* Subtle spacing increase */
+      color: #fff; 
+      text-decoration-color: #fff; 
+      letter-spacing: 0.5px; 
     }
 
-    /* Footer */
     footer {
       text-align: center;
-      padding: 1.5rem; /* More padding */
+      padding: 1.5rem; 
       background: #000;
-      color: #aaa; /* Muted footer color */
-      margin-top: 4rem; /* More spacing */
-      border-top: 2px solid #333; /* Darker top border */
-      opacity: 0; /* Prepare for animation */
-      /* Footer fades in last, after other animations potentially finish */
+      color: #aaa; 
+      margin-top: 4rem; 
+      border-top: 2px solid #333; 
+      opacity: 0; 
       animation: fadeIn 1.5s ease 1.5s forwards;
     }
 
-    /* Common Animation Keyframes */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -325,9 +301,7 @@
     </nav>
   </header>
 
-  <!-- Added 'animate-on-scroll' class to sections for JS targeting -->
   <section id="about" class="animate-on-scroll">
-    <!-- !!! IMPORTANT: Replace src="images/myface.jpg" with the actual path to your image !!! -->
     <img src="fawaz.jpg"  class="profile-pic" />
     <h2>About Me</h2>
     <p>
@@ -339,30 +313,28 @@
   <section id="projects" class="animate-on-scroll">
     <h2>Projects</h2>
     <div class="projects-container">
-      <!-- Added 'animate-on-scroll' class to project cards for JS targeting -->
-      <!-- The 'project' class itself is also used for styling and JS logic -->
       <div class="project animate-on-scroll">
-        <h3>Project 1</h3>
+        <h3>mammals</h3>
         <p>A simple website abt animals and bird.</p>
         <a href="3d.html" target="_blank">View Project</a>
       </div>
       <div class="project animate-on-scroll">
-        <h3>Project 2</h3>
+        <h3>choose the color</h3>
         <p>A simple game using my HTML and CSS skills</p>
         <a href="4d.html" target="_blank">View Project</a>
       </div>
       <div class="project animate-on-scroll">
-        <h3>Project 3</h3>
+        <h3>yoga</h3>
         <p>A website for breathe-in / breathe-out exercise .</p>
         <a href="c.html" target="_blank">View Project</a>
       </div>
       <div class="project animate-on-scroll">
-        <h3>Project 4</h3>
+        <h3>snakeVsnake</h3>
         <p>A JavaScript project that enhances user interaction.</p>
         <a href="snake.html" target="_blank">View Project</a>
       </div>
       <div class="project animate-on-scroll">
-        <h3>Project 5: Maze</h3>
+        <h3> moving Maze</h3>
         <p>An interactive maze game with dynamic obstacles.</p>
         <a href="movingmaze.html" target="_blank">View Project</a>
       </div>
@@ -394,17 +366,12 @@
     const observerCallback = (entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // Element is in view, add the 'is-visible' class to trigger animations
           entry.target.classList.add('is-visible');
 
-          // Apply stagger delay specifically for project cards
           if (entry.target.classList.contains('project')) {
-            // Check if delay has already been applied to prevent re-applying
             if (!entry.target.style.transitionDelay) {
-              // Find the index of the current project within the NodeList of all projects
               const projectIndex = Array.from(projectElements).indexOf(entry.target);
-              if (projectIndex !== -1) { // Ensure the element was found
-                 // Calculate delay: 100ms stagger per project card
+              if (projectIndex !== -1) { 
                  const delay = projectIndex * 100;
                  entry.target.style.transitionDelay = `${delay}ms`;
               }
@@ -418,13 +385,10 @@
       });
     };
 
-    // Create the Intersection Observer
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    // Observe each element designated for scroll animation
     scrollElements.forEach(el => observer.observe(el));
 
-    // --- Dynamic Year in Footer ---
     document.getElementById('current-year').textContent = new Date().getFullYear();
 
   </script>
