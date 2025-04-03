@@ -1,305 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Brick Pong Wall Duel</title>
-<style>
-    body { margin: 0; background-color: #111; display: flex; justify-content: center; align-items: center; height: 100vh; color: white; font-family: 'Courier New', Courier, monospace; }
-    canvas { background-color: #000; display: block; border: 1px solid #444; }
-    #scores { position: absolute; top: 10px; width: 100%; text-align: center; font-size: 1.5em; }
-    #message { position: absolute; top: 50px; width: 100%; text-align: center; font-size: 1.2em; color: yellow; visibility: hidden; }
-    #controls { position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 0.9em; color: #ccc;}
-</style>
+  <meta charset="UTF-8">
+  <title>Animated Text Shadow</title>
+  <style>
+    :root {
+      --shadow-color: #000;
+      --text-color: #333;
+      --shadow-size: 2px;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .text {
+      font-size: 48px;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-shadow: var(--shadow-size) var(--shadow-size) 4px var(--shadow-color);
+    }
+
+    .text:hover {
+      text-shadow:
+        0 0 calc(var(--shadow-size) * 2) var(--shadow-color),
+        0 0 calc(var(--shadow-size) * 4) var(--shadow-color);
+      transform: scale(1.05);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
 </head>
 <body>
+  <div class="controls">
+    <input type="text" id="text-input" placeholder="Type text">
+    <input type="color" id="text-color" value="#333333">
+    <input type="color" id="shadow-color" value="#000000">
+    <input type="range" id="shadow-size" min="1" max="10" value="2">
+  </div>
 
-<div id="scores">
-    <span id="score1">0</span> - <span id="score2">0</span>
-</div>
-<div id="message"></div>
-<canvas id="gameCanvas"></canvas>
-<div id="controls">P1: W/S | P2: Up/Down Arrow</div>
+  <div class="text" id="display-text">Hover Me</div>
 
+  <script>
+    const textInput = document.getElementById("text-input");
+    const textColor = document.getElementById("text-color");
+    const shadowColor = document.getElementById("shadow-color");
+    const shadowSize = document.getElementById("shadow-size");
+    const displayText = document.getElementById("display-text");
 
-<script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const score1Span = document.getElementById('score1');
-    const score2Span = document.getElementById('score2');
-    const messageDiv = document.getElementById('message');
-
-    const canvasWidth = 800;
-    const canvasHeight = 500;
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
-
-    const paddleWidth = 10;
-    const paddleHeight = 80;
-    const paddleSpeed = 6;
-    const player1Color = '#f0a';
-    const player2Color = '#0af';
-
-    const ballRadius = 7;
-    const initialBallSpeedX = 4;
-    const initialBallSpeedY = 4;
-    const maxBallSpeedX = 10;
-    const ballSpeedIncreaseFactor = 1.05;
-    const ballColor = '#fff';
-
-    const brickWallRows = 20;
-    const brickWallCols = 3;
-    const brickWidth = 15;
-    const brickHeight = 15;
-    const brickPadding = 3;
-    const wallOffsetFromCenter = 100;
-    const wallOffsetTop = 50;
-    const wallOffsetBottom = 50;
-    const brickVerticalSpace = canvasHeight - wallOffsetTop - wallOffsetBottom;
-
-    const brickColors = ['#d00', '#d80', '#dd0', '#0d0', '#08d', '#a0d', '#ccc', '#f88'];
-
-    const winningScore = 5;
-
-    let paddle1Y = (canvasHeight - paddleHeight) / 2;
-    let paddle2Y = (canvasHeight - paddleHeight) / 2;
-    let score1 = 0;
-    let score2 = 0;
-    let ballX = canvasWidth / 2;
-    let ballY = canvasHeight / 2;
-    let ballSpeedX = initialBallSpeedX * (Math.random() > 0.5 ? 1 : -1);
-    let ballSpeedY = initialBallSpeedY * (Math.random() > 0.5 ? 1 : -1);
-    let isGameOver = false;
-    let message = "";
-    let bricks = [];
-    let lastPlayerToHit = 0;
-
-    let p1KeyUp = false;
-    let p1KeyDown = false;
-    let p2KeyUp = false;
-    let p2KeyDown = false;
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'w' || e.key === 'W') p1KeyUp = true;
-        if (e.key === 's' || e.key === 'S') p1KeyDown = true;
-        if (e.key === 'ArrowUp') p2KeyUp = true;
-        if (e.key === 'ArrowDown') p2KeyDown = true;
-        if (isGameOver && e.key === ' ') {
-            resetGame();
-        }
-    });
-
-    document.addEventListener('keyup', (e) => {
-        if (e.key === 'w' || e.key === 'W') p1KeyUp = false;
-        if (e.key === 's' || e.key === 'S') p1KeyDown = false;
-        if (e.key === 'ArrowUp') p2KeyUp = false;
-        if (e.key === 'ArrowDown') p2KeyDown = false;
-    });
-
-    function createBricks() {
-        bricks = [];
-        const totalBrickHeightWithPadding = brickHeight + brickPadding;
-
-        const wall1StartX = canvasWidth / 2 - wallOffsetFromCenter - (brickWallCols * (brickWidth + brickPadding)) + brickPadding;
-        for (let c = 0; c < brickWallCols; c++) {
-            for (let r = 0; r < brickWallRows; r++) {
-                let brickY = wallOffsetTop + r * totalBrickHeightWithPadding;
-                if (brickY + brickHeight <= canvasHeight - wallOffsetBottom) {
-                     bricks.push({
-                        x: wall1StartX + c * (brickWidth + brickPadding),
-                        y: brickY,
-                        width: brickWidth,
-                        height: brickHeight,
-                        status: 1,
-                        color: brickColors[r % brickColors.length]
-                    });
-                }
-            }
-        }
-
-        const wall2StartX = canvasWidth / 2 + wallOffsetFromCenter;
-         for (let c = 0; c < brickWallCols; c++) {
-            for (let r = 0; r < brickWallRows; r++) {
-                 let brickY = wallOffsetTop + r * totalBrickHeightWithPadding;
-                 if (brickY + brickHeight <= canvasHeight - wallOffsetBottom) {
-                    bricks.push({
-                        x: wall2StartX + c * (brickWidth + brickPadding),
-                        y: brickY,
-                        width: brickWidth,
-                        height: brickHeight,
-                        status: 1,
-                        color: brickColors[r % brickColors.length]
-                    });
-                }
-            }
-        }
-    }
-
-
-    function resetBall(server) {
-        ballX = canvasWidth / 2;
-        ballY = canvasHeight / 2;
-        ballSpeedX = initialBallSpeedX * (server === 1 ? 1 : -1);
-        ballSpeedY = initialBallSpeedY * (Math.random() > 0.5 ? 1 : -1);
-        lastPlayerToHit = 0;
-    }
-
-    function resetGame() {
-        score1 = 0;
-        score2 = 0;
-        score1Span.textContent = score1;
-        score2Span.textContent = score2;
-        paddle1Y = (canvasHeight - paddleHeight) / 2;
-        paddle2Y = (canvasHeight - paddleHeight) / 2;
-        createBricks();
-        resetBall(Math.random() > 0.5 ? 1 : 2);
-        isGameOver = false;
-        messageDiv.style.visibility = 'hidden';
-        message = "";
-        gameLoop();
-    }
-
-    function updatePaddles() {
-        if (p1KeyUp && paddle1Y > 0) paddle1Y -= paddleSpeed;
-        if (p1KeyDown && paddle1Y < canvasHeight - paddleHeight) paddle1Y += paddleSpeed;
-        if (p2KeyUp && paddle2Y > 0) paddle2Y -= paddleSpeed;
-        if (p2KeyDown && paddle2Y < canvasHeight - paddleHeight) paddle2Y += paddleSpeed;
-    }
-
-    function updateBall() {
-        ballX += ballSpeedX;
-        ballY += ballSpeedY;
-
-        if (ballY + ballRadius > canvasHeight || ballY - ballRadius < 0) {
-            ballSpeedY = -ballSpeedY;
-            ballY = (ballY - ballRadius < 0) ? ballRadius : canvasHeight - ballRadius;
-        }
-
-        if (ballX - ballRadius < paddleWidth && ballY > paddle1Y && ballY < paddle1Y + paddleHeight) {
-            ballX = paddleWidth + ballRadius;
-            ballSpeedX = -ballSpeedX;
-            lastPlayerToHit = 1;
-            let deltaY = ballY - (paddle1Y + paddleHeight / 2);
-            ballSpeedY = deltaY * 0.25;
-            ballSpeedX *= ballSpeedIncreaseFactor;
-            ballSpeedY *= ballSpeedIncreaseFactor;
-        }
-
-        if (ballX + ballRadius > canvasWidth - paddleWidth && ballY > paddle2Y && ballY < paddle2Y + paddleHeight) {
-            ballX = canvasWidth - paddleWidth - ballRadius;
-            ballSpeedX = -ballSpeedX;
-            lastPlayerToHit = 2;
-            let deltaY = ballY - (paddle2Y + paddleHeight / 2);
-            ballSpeedY = deltaY * 0.25;
-            ballSpeedX *= ballSpeedIncreaseFactor;
-            ballSpeedY *= ballSpeedIncreaseFactor;
-        }
-
-         ballSpeedX = Math.max(-maxBallSpeedX, Math.min(maxBallSpeedX, ballSpeedX));
-
-        for (let i = bricks.length - 1; i >= 0; i--) {
-            const b = bricks[i];
-            if (b.status === 1) {
-                if (ballX + ballRadius > b.x &&
-                    ballX - ballRadius < b.x + brickWidth &&
-                    ballY + ballRadius > b.y &&
-                    ballY - ballRadius < b.y + brickHeight)
-                {
-                    b.status = 0;
-
-                    let hitFromLeft = ballX + ballRadius - ballSpeedX <= b.x;
-                    let hitFromRight = ballX - ballRadius - ballSpeedX >= b.x + brickWidth;
-                    let hitFromTop = ballY + ballRadius - ballSpeedY <= b.y;
-                    let hitFromBottom = ballY - ballRadius - ballSpeedY >= b.y + brickHeight;
-
-                    if (hitFromLeft || hitFromRight) {
-                        ballSpeedX = -ballSpeedX;
-                        ballX += (ballSpeedX > 0 ? 1 : -1);
-                    } else if (hitFromTop || hitFromBottom) {
-                        ballSpeedY = -ballSpeedY;
-                        ballY += (ballSpeedY > 0 ? 1 : -1);
-                    } else {
-                        ballSpeedX = -ballSpeedX;
-                        ballSpeedY = -ballSpeedY;
-                    }
-                    break;
-                }
-            }
-        }
-
-
-        if (ballX + ballRadius < 0) {
-            score2++;
-            score2Span.textContent = score2;
-            if (score2 >= winningScore) gameOver(2); else resetBall(1);
-        } else if (ballX - ballRadius > canvasWidth) {
-            score1++;
-            score1Span.textContent = score1;
-            if (score1 >= winningScore) gameOver(1); else resetBall(2);
-        }
-    }
-
-    function drawRect(x, y, w, h, color) {
-        ctx.fillStyle = color;
-        ctx.fillRect(x, y, w, h);
-    }
-
-    function drawCircle(x, y, r, color) {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2, false);
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    function drawBricks() {
-        bricks.forEach(b => {
-            if (b.status === 1) {
-                drawRect(b.x, b.y, brickWidth, brickHeight, b.color);
-            }
-        });
-    }
-
-
-    function drawNet() {
-        ctx.strokeStyle = '#555';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([10, 10]);
-        ctx.beginPath();
-        ctx.moveTo(canvasWidth / 2, 0);
-        ctx.lineTo(canvasWidth / 2, canvasHeight);
-        ctx.stroke();
-        ctx.setLineDash([]);
-    }
-
-    function gameOver(winner) {
-        isGameOver = true;
-        message = `Player ${winner} Wins! (${score1} - ${score2})`;
-        messageDiv.textContent = message + " (Space to Restart)";
-        messageDiv.style.visibility = 'visible';
-    }
-
-    let animationFrameId;
-    function gameLoop() {
-        if (isGameOver) {
-             return;
-        }
-
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
-        updatePaddles();
-        updateBall();
-
-        drawNet();
-        drawRect(0, paddle1Y, paddleWidth, paddleHeight, player1Color);
-        drawRect(canvasWidth - paddleWidth, paddle2Y, paddleWidth, paddleHeight, player2Color);
-        drawCircle(ballX, ballY, ballRadius, ballColor);
-        drawBricks();
-
-        animationFrameId = requestAnimationFrame(gameLoop);
-    }
-
-    resetGame();
-
-</script>
-
+    textInput.oninput = () => displayText.textContent = textInput.value || "Hover Me";
+    textColor.oninput = () => document.documentElement.style.setProperty("--text-color", textColor.value);
+    shadowColor.oninput = () => document.documentElement.style.setProperty("--shadow-color", shadowColor.value);
+    shadowSize.oninput = () => document.documentElement.style.setProperty("--shadow-size", shadowSize.value + "px");
+  </script>
 </body>
 </html>
